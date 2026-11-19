@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html {{{ output.htmlattributes }}}>
+<head>
+    <title>{{{ output.page_title }}}</title>
+    {{{ output.standard_head_html }}}
+</head>
+<body {{{ bodyattributes }}}>
+{{{ output.standard_top_of_body_html }}}
+
+{{! Minimal navbar for exam / quiz secure mode }}
+<nav class="erp-navbar erp-navbar-secure" aria-label="Exam navigation">
+    <div class="erp-navbar-inner">
+        <span class="erp-brand">
+            <span class="erp-brand-mark">
+                <i class="bi bi-mortarboard-fill"></i>
+            </span>
+            <span class="erp-brand-text">{{collegename}}</span>
+        </span>
+        <div class="erp-navbar-spacer"></div>
+        <span class="erp-secure-badge">
+            <i class="bi bi-shield-lock-fill"></i> Secure Mode
+        </span>
+    </div>
+</nav>
+
+<div class="erp-page-wrap erp-page-wrap-secure" id="page">
+    <div class="erp-main" id="main-content">
+        <div class="erp-page-header">{{{ headercontent }}}</div>
+        {{{ maincontentblocks }}}
+    </div>
+</div>
+
+{{{ footer }}}
+{{{ output.standard_end_of_body_html }}}
+</body>
+</html>

@@ -1,0 +1,632 @@
+
+/* =========================================================
+   COLLEGE MANAGEMENT THEME
+   Moodle 4.5 | Child theme of Boost
+   Based on the Django College ERP design
+   ========================================================= */
+
+:root {
+    --college-primary: #1769ff;
+    --college-primary-dark: #0c3470;
+    --college-navy: #12345c;
+    --college-navy-deep: #102b4f;
+
+    --college-background: #f3f8ff;
+    --college-surface: #ffffff;
+
+    --college-text: #17365f;
+    --college-muted: #6681a7;
+    --college-border: #d8e8fb;
+
+    --college-green: #13b981;
+    --college-red: #f04452;
+    --college-orange: #ff9f1c;
+    --college-purple: #8b5cf6;
+    --college-cyan: #20b8d5;
+
+    --college-radius: 13px;
+    --college-shadow: 0 5px 22px rgba(27, 76, 135, 0.055);
+    --college-shadow-hover: 0 12px 30px rgba(27, 76, 135, 0.12);
+}
+
+/* ---------------------------------------------------------
+   GLOBAL
+   --------------------------------------------------------- */
+
+html,
+body {
+    background: var(--college-background) !important;
+    color: var(--college-text);
+    font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+body {
+    background-image:
+        radial-gradient(
+            circle at top left,
+            rgba(23, 105, 255, 0.045),
+            transparent 35%
+        );
+}
+
+a {
+    color: var(--college-primary);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--college-primary-dark);
+    text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--college-navy);
+    font-weight: 700;
+}
+
+/* ---------------------------------------------------------
+   NAVBAR
+   --------------------------------------------------------- */
+
+.navbar {
+    background: linear-gradient(
+        110deg,
+        #102f58 0%,
+        #173e70 55%,
+        #0e2c51 100%
+    ) !important;
+
+    min-height: 66px;
+    padding: 11px 25px;
+    border: 0;
+    box-shadow: 0 4px 16px rgba(16, 43, 79, 0.15);
+}
+
+.navbar .navbar-brand {
+    color: #ffffff !important;
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+}
+
+.navbar .nav-link {
+    color: #d9e8ff !important;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 9px 12px !important;
+    border-radius: 8px;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus,
+.navbar .nav-link.active {
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.13);
+}
+
+.navbar .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.navbar .navbar-toggler-icon {
+    filter: brightness(0) invert(1);
+}
+
+/* Moodle user menu and dropdowns */
+
+.dropdown-menu {
+    border: 1px solid var(--college-border);
+    border-radius: 12px;
+    padding: 7px;
+    box-shadow: var(--college-shadow-hover);
+    background: #ffffff;
+}
+
+.dropdown-item {
+    color: var(--college-text);
+    font-size: 13px;
+    border-radius: 7px;
+    padding: 9px 12px;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    color: var(--college-primary-dark);
+    background: #edf5ff;
+}
+
+/* ---------------------------------------------------------
+   MAIN PAGE
+   --------------------------------------------------------- */
+
+#page,
+#page-wrapper {
+    background: transparent;
+}
+
+#page.drawers {
+    margin-top: 0;
+}
+
+#page-content {
+    padding-top: 18px;
+    padding-bottom: 30px;
+}
+
+#region-main {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+}
+
+.container,
+.container-fluid {
+    max-width: 1600px;
+}
+
+#page-header {
+    margin-bottom: 18px;
+}
+
+#page-header h1,
+#page-header .h2 {
+    color: var(--college-navy);
+    font-weight: 800;
+}
+
+/* ---------------------------------------------------------
+   BREADCRUMBS
+   --------------------------------------------------------- */
+
+.breadcrumb {
+    background: transparent;
+    padding: 8px 0;
+    margin-bottom: 12px;
+    font-size: 12px;
+}
+
+.breadcrumb-item,
+.breadcrumb-item a {
+    color: var(--college-muted);
+}
+
+.breadcrumb-item.active {
+    color: var(--college-navy);
+    font-weight: 600;
+}
+
+/* ---------------------------------------------------------
+   CARDS
+   --------------------------------------------------------- */
+
+.card,
+.block,
+.activity-item,
+.coursebox,
+.dashboard-card {
+    background: var(--college-surface);
+    border: 1px solid var(--college-border);
+    border-radius: var(--college-radius);
+    box-shadow: var(--college-shadow);
+}
+
+.card {
+    overflow: hidden;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: var(--college-shadow-hover);
+}
+
+.card-header {
+    background: #f8fbff;
+    color: var(--college-navy);
+    border-bottom: 1px solid var(--college-border);
+    font-weight: 700;
+}
+
+.card-body {
+    color: var(--college-text);
+}
+
+.card-footer {
+    background: #f8fbff;
+    border-top: 1px solid var(--college-border);
+}
+
+/* Moodle blocks */
+
+.block {
+    margin-bottom: 18px;
+}
+
+.block .card-title,
+.block .block-header h5 {
+    color: var(--college-navy);
+    font-weight: 700;
+}
+
+/* ---------------------------------------------------------
+   BUTTONS
+   --------------------------------------------------------- */
+
+.btn {
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 8px 15px;
+    transition: all 0.2s ease;
+}
+
+.btn-primary,
+.btn-primary:focus {
+    background: var(--college-primary);
+    border-color: var(--college-primary);
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background: var(--college-primary-dark);
+    border-color: var(--college-primary-dark);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(23, 105, 255, 0.2);
+}
+
+.btn-secondary {
+    background: #edf4ff;
+    color: var(--college-navy);
+    border-color: var(--college-border);
+}
+
+.btn-secondary:hover {
+    background: #dceaff;
+    color: var(--college-navy);
+}
+
+.btn-success {
+    background: var(--college-green);
+    border-color: var(--college-green);
+}
+
+.btn-danger {
+    background: var(--college-red);
+    border-color: var(--college-red);
+}
+
+.btn-warning {
+    background: var(--college-orange);
+    border-color: var(--college-orange);
+}
+
+/* ---------------------------------------------------------
+   FORMS
+   --------------------------------------------------------- */
+
+.form-control,
+.form-select,
+.custom-select,
+select,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+textarea {
+    border: 1px solid var(--college-border);
+    border-radius: 8px;
+    color: var(--college-text);
+    background: #ffffff;
+    font-size: 13px;
+    min-height: 39px;
+    box-shadow: none;
+}
+
+.form-control:focus,
+.form-select:focus,
+.custom-select:focus,
+select:focus,
+input:focus,
+textarea:focus {
+    border-color: var(--college-primary);
+    box-shadow: 0 0 0 3px rgba(23, 105, 255, 0.10);
+    outline: none;
+}
+
+label,
+.form-label,
+.col-form-label {
+    color: var(--college-navy);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+/* ---------------------------------------------------------
+   TABLES
+   --------------------------------------------------------- */
+
+.table {
+    color: var(--college-text);
+    background: #ffffff;
+    border-color: var(--college-border);
+    font-size: 12px;
+}
+
+.table thead th {
+    background: #edf5ff;
+    color: var(--college-navy);
+    font-weight: 700;
+    border-bottom: 1px solid var(--college-border);
+    vertical-align: middle;
+}
+
+.table td,
+.table th {
+    padding: 11px 12px;
+    border-color: var(--college-border);
+    vertical-align: middle;
+}
+
+.table tbody tr:hover {
+    background: #f7faff;
+}
+
+/* ---------------------------------------------------------
+   BADGES AND LABELS
+   --------------------------------------------------------- */
+
+.badge {
+    border-radius: 20px;
+    padding: 5px 9px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.badge-primary {
+    background: #e7f0ff;
+    color: var(--college-primary-dark);
+}
+
+.badge-success {
+    background: #e4fbf2;
+    color: #087f56;
+}
+
+.badge-danger {
+    background: #fff0f1;
+    color: #c62836;
+}
+
+.badge-warning {
+    background: #fff5e5;
+    color: #a65b00;
+}
+
+/* ---------------------------------------------------------
+   ALERTS
+   --------------------------------------------------------- */
+
+.alert {
+    border: 1px solid transparent;
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+.alert-success {
+    background: #e9fbf3;
+    border-color: #b9efd7;
+    color: #087f56;
+}
+
+.alert-danger {
+    background: #fff0f1;
+    border-color: #ffd0d4;
+    color: #bd2635;
+}
+
+.alert-warning {
+    background: #fff8e9;
+    border-color: #ffe5b4;
+    color: #925300;
+}
+
+.alert-info {
+    background: #edf7ff;
+    border-color: #cce8ff;
+    color: #14558b;
+}
+
+/* ---------------------------------------------------------
+   COURSE LIST AND COURSE CONTENT
+   --------------------------------------------------------- */
+
+.course-card,
+.coursebox,
+.course-content-item {
+    border-radius: var(--college-radius);
+    border: 1px solid var(--college-border);
+    background: #ffffff;
+    box-shadow: var(--college-shadow);
+}
+
+.course-content ul.topics,
+.course-content ul.weeks {
+    padding: 0;
+}
+
+.course-section {
+    background: #ffffff;
+    border: 1px solid var(--college-border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 15px;
+}
+
+.course-section-header {
+    color: var(--college-navy);
+    font-weight: 700;
+}
+
+.activity-item {
+    padding: 12px;
+    margin-bottom: 10px;
+}
+
+.activity-item:hover {
+    border-color: #b6d3ff;
+    background: #fbfdff;
+}
+
+/* ---------------------------------------------------------
+   LOGIN PAGE
+   --------------------------------------------------------- */
+
+.pagelayout-login {
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(23, 105, 255, 0.10),
+            transparent 40%
+        ),
+        var(--college-background);
+}
+
+.pagelayout-login #page {
+    background: transparent;
+}
+
+.pagelayout-login .login-container,
+.pagelayout-login .loginform {
+    background: #ffffff;
+    border: 1px solid var(--college-border);
+    border-radius: 16px;
+    box-shadow: var(--college-shadow-hover);
+    padding: 25px;
+}
+
+.pagelayout-login h1,
+.pagelayout-login h2 {
+    color: var(--college-navy);
+    font-weight: 800;
+}
+
+/* ---------------------------------------------------------
+   NAVIGATION DRAWER
+   --------------------------------------------------------- */
+
+.drawer {
+    background: #ffffff;
+    border-color: var(--college-border);
+}
+
+.drawer .list-group-item {
+    color: var(--college-text);
+    border-color: var(--college-border);
+    font-size: 12px;
+}
+
+.drawer .list-group-item:hover {
+    background: #edf5ff;
+    color: var(--college-primary-dark);
+}
+
+.drawer .list-group-item.active {
+    background: #e7f0ff;
+    color: var(--college-primary-dark);
+    border-color: var(--college-border);
+    font-weight: 700;
+}
+
+/* ---------------------------------------------------------
+   FOOTER
+   --------------------------------------------------------- */
+
+#page-footer {
+    background: var(--college-navy-deep);
+    color: #d9e8ff;
+    border-top: 0;
+    padding: 20px;
+}
+
+#page-footer a {
+    color: #ffffff;
+}
+
+/* ---------------------------------------------------------
+   ACCESSIBILITY AND SMALL DETAILS
+   --------------------------------------------------------- */
+
+hr {
+    border-color: var(--college-border);
+}
+
+.text-muted,
+small.text-muted {
+    color: var(--college-muted) !important;
+}
+
+.pagination .page-link {
+    color: var(--college-primary);
+    border-color: var(--college-border);
+    border-radius: 7px;
+    margin: 0 2px;
+}
+
+.pagination .page-item.active .page-link {
+    background: var(--college-primary);
+    border-color: var(--college-primary);
+    color: #ffffff;
+}
+
+.progress {
+    height: 8px;
+    border-radius: 20px;
+    background: #e5effc;
+}
+
+.progress-bar {
+    background: var(--college-primary);
+    border-radius: 20px;
+}
+
+/* ---------------------------------------------------------
+   RESPONSIVE
+   --------------------------------------------------------- */
+
+@media (max-width: 767px) {
+    .navbar {
+        padding: 10px 14px;
+    }
+
+    .navbar .navbar-brand {
+        font-size: 16px;
+    }
+
+    #page-content {
+        padding: 12px;
+    }
+
+    .card-body {
+        padding: 14px;
+    }
+
+    .table-responsive {
+        border-radius: 9px;
+    }
+
+    .pagelayout-login .login-container,
+    .pagelayout-login .loginform {
+        padding: 18px;
+    }
+}

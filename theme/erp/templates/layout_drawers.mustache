@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html {{{ output.htmlattributes }}}>
+<head>
+    <title>{{{ output.page_title }}}</title>
+    <html-head-content>
+    {{{ output.standard_head_html }}}
+    {{{ output.head_code }}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600&family=Zilla+Slab:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    {{! Apply saved theme before first paint — prevents colour flash }}
+    <script>
+    (function(){
+        try {
+            var saved = localStorage.getItem('erp-moodle-theme');
+            if (!saved) {
+                saved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            document.documentElement.setAttribute('data-bs-theme', saved);
+        } catch(e) {}
+    })();
+    </script>
+</head>
+<body {{{ bodyattributes }}}>
+{{{ output.standard_top_of_body_html }}}
+
+{{! ── ERP Navbar ─────────────────────────────────────────────────────────── }}
+<nav class="erp-navbar" id="erp-navbar" aria-label="Main navigation">
+    <div class="erp-navbar-inner">
+
+        {{! Brand }}
+        <a class="erp-brand" href="{{{ output.home_url }}}">
+            {{# logourl }}
+                <img src="{{{ logourl }}}" alt="{{collegename}}" class="erp-logo">
+            {{/ logourl }}
+            {{^ logourl }}
+                <span class="erp-brand-mark" aria-hidden="true">
+                    <i class="bi bi-mortarboard-fill"></i>
+                </span>
+                <span class="erp-brand-text">{{collegename}}</span>
+            {{/ logourl }}
+        </a>
+
+        <div class="erp-navbar-spacer"></div>
+
+        {{! Edit mode toggle }}
+        {{# haseditswitchhdr }}
+        <div class="erp-edit-switch">{{{ editswitch }}}</div>
+        {{/ haseditswitchhdr }}
+
+        {{! Dark / light theme toggle }}
+        <button class="erp-theme-btn" id="erp-theme-btn"
+                type="button"
+                aria-label="Switch theme"
+                title="Switch theme">
+            <i class="bi bi-moon-stars erp-icon-moon" aria-hidden="true"></i>
+            <i class="bi bi-sun erp-icon-sun" aria-hidden="true"></i>
+        </button>
+
+        {{! Back to ERP }}
+        {{# erpurl }}
+        <a class="erp-nav-link" href="{{{ erpurl }}}" title="Back to College ERP">
+            <i class="bi bi-box-arrow-left" aria-hidden="true"></i>
+            <span class="erp-nav-link-text">Back to ERP</span>
+        </a>
+        {{/ erpurl }}
+
+        {{! Profile dropdown — pure HTML/JS, no Bootstrap dependency }}
+                {{! ── LOGGED IN: user chip + dropdown ───────────────────────────── }}
+        {{# loggedin }}
+        <div class="erp-user-menu" id="erp-user-menu">
+            <button class="erp-user-chip"
+                    id="erp-user-btn"
+                    type="button"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    aria-label="Account menu">
+                <span class="erp-user-init" aria-hidden="true">{{userinit}}</span>
+                <span class="erp-user-name">{{userfullname}}</span>
+                <i class="bi bi-chevron-down erp-chevron" aria-hidden="true"></i>
+            </button>
+
+            <ul class="erp-profile-menu" id="erp-profile-menu" role="menu">
+                <li class="erp-pm-header" role="none">
+                    <i class="bi bi-person-circle" aria-hidden="true"></i>
+                    <span>{{userfullname}}</span>
+                </li>
+                <li class="erp-pm-divider" role="none"></li>
+                {{# userprofileurl }}
+                <li role="none">
+                    <a class="erp-pm-item" href="{{{ userprofileurl }}}" role="menuitem">
+                        <i class="bi bi-person" aria-hidden="true"></i>
+                        My profile
+                    </a>
+                </li>
+                {{/ userprofileurl }}
+                {{# erpurl }}
+                <li role="none">
+                    <a class="erp-pm-item" href="{{{ erpurl }}}" role="menuitem">
+                        <i class="bi bi-grid-3x3-gap" aria-hidden="true"></i>
+                        College ERP
+                    </a>
+                </li>
+                {{/ erpurl }}
+                <li class="erp-pm-divider" role="none"></li>
+                <li role="none">
+                    <a class="erp-pm-item erp-pm-logout"
+                       href="{{{ logouturl }}}"
+                       role="menuitem">
+                        <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+                        Sign out
+                    </a>
+                </li>
+            </ul>
+        </div>
+        {{/ loggedin }}
+
+        {{! ── NOT LOGGED IN: login button ────────────────────────────────── }}
+        {{^ loggedin }}
+        <a class="erp-login-btn" href="{{{ erpurl }}}">
+            <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
+            <span>Log in</span>
+        </a>
+        {{/ loggedin }}
+
+    </div>
+</nav>
+
+{{! ── Page wrapper ───────────────────────────────────────────────────────── }}
+<div class="erp-page-wrap" id="page">
+
+    {{! Sidebar }}
+    
+{{! ERP Moodle Sidebar }}
+{{# loggedin }}
+<aside class="erp-sidebar" id="erp-sidebar"
+       aria-label="Moodle navigation">
+
+{{! Main Moodle navigation }}
+    <div class="erp-sidebar-head">
+    <i class="bi bi-grid-1x2-fill" aria-hidden="true"></i>
+    <span>Navigation</span>
+    </div>
+
+    <div class="erp-main-navigation">
+    {{# primarymoremenu }}
+        {{> core/moremenu }}
+    {{/ primarymoremenu }}
+    </div>
+
+    {{! Course index }}
+    <div class="erp-sidebar-head erp-course-heading">
+        <i class="bi bi-journals" aria-hidden="true"></i>
+        <span>Course index</span>
+    </div>
+
+    {{# usercourseindex }}
+    <div class="erp-courseindex" id="courseindex">
+        {{{ courseindex }}}
+    </div>
+    {{/ usercourseindex }}
+
+</aside>
+{{/ loggedin }}
+
+
+    {{! Main content }}
+    <div class="erp-main" id="main-content">
+
+        {{# hassecondarynavigation }}
+        <div class="erp-secondary-nav" id="secondary-navigation">
+            {{# secondarynavigation }}{{> core/moremenu }}{{/ secondarynavigation }}
+        </div>
+        {{/ hassecondarynavigation }}
+
+        {{# overflow }}
+        <div class="erp-overflow container-fluid">
+            {{> core/url_select }}
+        </div>
+        {{/ overflow }}
+
+        <div class="erp-page-header">
+            {{{ headercontent }}}
+        </div>
+
+        {{{ beforecontent }}}
+
+        <div class="erp-content-row" id="page-content">
+            <div class="erp-region-main" id="region-main">
+                {{# addblockbutton }}{{{ addblockbutton }}}{{/ addblockbutton }}
+                {{{ maincontentblocks }}}
+                {{{ aftercontent }}}
+            </div>
+            {{# hasblocks }}
+            <section class="erp-blocks" aria-label="Blocks" id="blocks-column">
+                {{{ sidepreblocks }}}
+            </section>
+            {{/ hasblocks }}
+        </div>
+
+    </div>
+</div>
+
+{{{ output.standard_after_main_region_html }}}
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    'use strict';
+
+    var html = document.documentElement;
+
+    // ── Theme helpers ─────────────────────────────────────────────────────
+    function getTheme() {
+        try { return localStorage.getItem('erp-moodle-theme') || 'light'; }
+        catch (e) { return 'light'; }
+    }
+
+    function saveTheme(t) {
+        try { localStorage.setItem('erp-moodle-theme', t); } catch (e) {}
+    }
+
+    function applyTheme(theme) {
+        html.setAttribute('data-bs-theme', theme);
+
+        // Moodle kabhi kabhi sub-elements pe data-bs-theme stamp karta hai
+        // unhe bhi sync karo
+        var stamped = document.querySelectorAll('[data-bs-theme]');
+        for (var i = 0; i < stamped.length; i++) {
+            if (stamped[i] !== html) {
+                stamped[i].setAttribute('data-bs-theme', theme);
+            }
+        }
+
+        saveTheme(theme);
+
+        // Theme button ka state sync karo
+        var btn = document.getElementById('erp-theme-btn');
+        if (btn) {
+            btn.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+            btn.setAttribute('title',
+                theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'
+            );
+        }
+    }
+
+    // Page load pe theme apply karo (head mein bhi hota hai, lekin
+    // button ka aria-pressed sync karne ke liye repeat karna padta hai)
+    applyTheme(getTheme());
+
+    // ── Theme toggle button ───────────────────────────────────────────────
+    var themeBtn = document.getElementById('erp-theme-btn');
+    if (themeBtn) {
+        themeBtn.addEventListener('click', function () {
+            applyTheme(getTheme() === 'dark' ? 'light' : 'dark');
+        });
+    }
+
+    // ── Profile dropdown ──────────────────────────────────────────────────
+    // Yeh elements sirf tab DOM mein honge jab user logged in ho.
+    // Isliye pehle null check karo — agar nahi mile toh silently skip karo.
+    var userBtn  = document.getElementById('erp-user-btn');
+    var userMenu = document.getElementById('erp-profile-menu');
+
+    if (userBtn && userMenu) {
+
+        function isOpen() {
+            return userMenu.classList.contains('erp-pm-open');
+        }
+
+        function openMenu() {
+            userMenu.classList.add('erp-pm-open');
+            userBtn.setAttribute('aria-expanded', 'true');
+            // Pehle link pe focus karo accessibility ke liye
+            var first = userMenu.querySelector('a.erp-pm-item');
+            if (first) { first.focus(); }
+        }
+
+        function closeMenu() {
+            userMenu.classList.remove('erp-pm-open');
+            userBtn.setAttribute('aria-expanded', 'false');
+        }
+
+        // Button click pe toggle
+        userBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            isOpen() ? closeMenu() : openMenu();
+        });
+
+        // Bahar click karne pe close
+        document.addEventListener('click', function (e) {
+            if (!userBtn.contains(e.target) && !userMenu.contains(e.target)) {
+                closeMenu();
+            }
+        });
+
+        // Escape press pe close + focus wapas button pe
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && isOpen()) {
+                closeMenu();
+                userBtn.focus();
+            }
+        });
+
+        // ArrowDown / ArrowUp se menu items navigate karo
+        userMenu.addEventListener('keydown', function (e) {
+            var items = Array.prototype.slice.call(
+                userMenu.querySelectorAll('a.erp-pm-item')
+            );
+            var idx = items.indexOf(document.activeElement);
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                items[idx < items.length - 1 ? idx + 1 : 0].focus();
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (idx > 0) { items[idx - 1].focus(); }
+                else { closeMenu(); userBtn.focus(); }
+            } else if (e.key === 'Tab') {
+                // Tab press pe close karo taaki focus naturally age badhe
+                closeMenu();
+            }
+        });
+
+    }
+    // userBtn ya userMenu nahi mile matlab user logged out hai —
+    // koi error nahi, quietly skip ho jaata hai.
+
+}); // end DOMContentLoaded
+</script>
+
+<footer id="page-footer">
+    {{{ output.standard_footer_html }}}
+</footer>
+
+{{{ output.standard_end_of_body_html }}}
+
+</body>
+</html>

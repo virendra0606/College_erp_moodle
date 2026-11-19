@@ -6,6 +6,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 global $PAGE, $USER, $OUTPUT, $SITE;
+echo $OUTPUT->doctype();
 
 // --------------------------------------------------
 // Theme settings.
@@ -275,7 +276,7 @@ $PAGE->requires->js_call_amd(
 // Render layout.
 // --------------------------------------------------
 
-echo $OUTPUT->doctype();
+
 
 echo $OUTPUT->render_from_template(
     'theme_erp/layout_drawers',

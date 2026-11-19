@@ -171,7 +171,6 @@ nav.navbar,
 .nav-drawer-backdrop,
 [data-region="drawer"],
 [data-region="left-drawer"],
-#theme_boost-drawers-primary,
 .drawertoggle,
 .secondary-navigation > .navigation,
 .boost-union-nav,
@@ -1391,6 +1390,15 @@ code {
 .erp-main-navigation .dropdown-toggle {
     cursor: pointer;
 }
+.erp-sidebar,
+.erp-main-navigation,
+.erp-main-navigation .moremenu {
+    overflow: visible !important;
+}
+
+.erp-main-navigation [data-region="moredropdown"] {
+    z-index: 1050 !important;
+}
 
 
 // Empty state — exact ERP .empty
@@ -1414,4 +1422,18 @@ code {
         transition-duration:      0.01ms !important;
         scroll-behavior:          auto !important;
     }
+}
+/* Mobile ERP navigation toggle */
+.erp-mobile-nav-toggle {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    background: transparent;
+    color: var(--on-chalk);
+    font-size: 1.8rem;
+    line-height: 1;
+    padding: 4px 8px;
+    cursor: pointer;
 }

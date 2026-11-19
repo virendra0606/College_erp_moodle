@@ -29,6 +29,16 @@
 {{! ── ERP Navbar ─────────────────────────────────────────────────────────── }}
 <nav class="erp-navbar" id="erp-navbar" aria-label="Main navigation">
     <div class="erp-navbar-inner">
+                {{# loggedin }}
+        <button class="erp-mobile-nav-toggle"
+                type="button"
+                data-toggler="drawers"
+                data-action="toggle"
+                data-target="theme_boost-drawers-primary"
+                aria-label="Open navigation menu">
+            <i class="bi bi-list" aria-hidden="true"></i>
+        </button>
+        {{/ loggedin }}
 
         {{! Brand }}
         <a class="erp-brand" href="{{{ output.home_url }}}">
@@ -128,6 +138,10 @@
     </div>
 </nav>
 
+{{# loggedin }}
+    {{> theme_boost/primary-drawer-mobile }}
+{{/ loggedin }}
+
 {{! ── Page wrapper ───────────────────────────────────────────────────────── }}
 <div class="erp-page-wrap" id="page">
 
@@ -139,17 +153,7 @@
        aria-label="Moodle navigation">
 
 {{! Main Moodle navigation }}
-    <div class="erp-sidebar-head">
-    <i class="bi bi-grid-1x2-fill" aria-hidden="true"></i>
-    <span>Navigation</span>
-    </div>
-
-    <div class="erp-main-navigation">
-    {{# primarymoremenu }}
-        {{> core/moremenu }}
-    {{/ primarymoremenu }}
-    </div>
-
+    
     {{! Course index }}
     <div class="erp-sidebar-head erp-course-heading">
         <i class="bi bi-journals" aria-hidden="true"></i>

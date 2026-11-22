@@ -6,7 +6,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 global $PAGE, $USER, $OUTPUT, $SITE;
+require_once($CFG->libdir . '/adminlib.php');
+require_once($CFG->dirroot . '/course/lib.php');
 echo $OUTPUT->doctype();
+
 
 // --------------------------------------------------
 // Theme settings.
@@ -56,6 +59,7 @@ if (!empty($files)) {
 // --------------------------------------------------
 
 $loggedin = isloggedin() && !isguestuser();
+$isadmin = is_siteadmin();
 
 $userfull = '';
 $userinit = '?';
@@ -166,9 +170,7 @@ $headercontent = $OUTPUT->render_from_template(
 
 $beforecontent = $OUTPUT->course_content_header();
 
-ob_start();
-echo $OUTPUT->main_content();
-$maincontentblocks = ob_get_clean();
+$maincontentblocks = $OUTPUT->main_content();
 
 $aftercontent = $OUTPUT->course_content_footer();
 
@@ -207,6 +209,70 @@ $primarymenu = $primary->export_for_template($renderer);
 
 
 // --------------------------------------------------
+// ERP Administration Sidebar - Moodle 4.5.
+// --------------------------------------------------
+
+$admincategories = [];
+
+if (has_capability('moodle/site:config', context_system::instance())) {
+
+    $adminroot = admin_get_root(false, true);
+
+    // Get Moodle's real administration categories.
+    $availablecategories = [];
+
+    foreach ($adminroot->get_children() as $item) {
+
+        if (!($item instanceof admin_category)) {
+            continue;
+        }
+
+        if ($item->is_hidden() || !$item->check_access()) {
+            continue;
+        }
+
+        $availablecategories[$item->name] = $item;
+    }
+
+    // General is an overview link in Moodle, not a root category.
+    $admincategories[] = [
+        'name' => 'General',
+        'url' => (new moodle_url('/admin/index.php'))->out(false),
+    ];
+
+    // Display only the requested categories, in the required order.
+    $wantedcategories = [
+        'users'      => 'Users',
+        'courses'    => 'Courses',
+        'grades'     => 'Grades',
+        'modules'    => 'Plugins',
+        'appearance' => 'Appearance',
+        'server'     => 'Server',
+    ];
+
+    foreach ($wantedcategories as $categorykey => $categorylabel) {
+
+        if (!isset($availablecategories[$categorykey])) {
+            continue;
+        }
+
+        $category = $availablecategories[$categorykey];
+        $categoryurl = $category->get_settings_page_url();
+
+        if (!$categoryurl) {
+            continue;
+        }
+
+        $admincategories[] = [
+            'name' => $categorylabel,
+            'url' => $categoryurl->out(false),
+        ];
+    }
+}
+
+
+
+// --------------------------------------------------
 // Template context.
 // --------------------------------------------------
 
@@ -238,6 +304,7 @@ $templatecontext = [
     'userprofileurl' => $profileurl,
     'logouturl' => $logouturl,
     'logoutaction' => $logoutaction,
+    'isadmin'=> $isadmin,
 
     // Editing.
     'haseditswitchhdr' => $PAGE->user_allowed_editing(),
@@ -261,6 +328,7 @@ $templatecontext = [
     // Course index.
     'courseindex' => $courseindex,
     'usercourseindex' => $usercourseindex,
+    'admincategories' => $admincategories,
 ];
 
 // --------------------------------------------------

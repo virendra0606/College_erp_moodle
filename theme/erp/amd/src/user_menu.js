@@ -1,114 +1,95 @@
+// This file is part of theme_erp.
+// Moodle AMD requires define() — NOT ES module export syntax.
 
-/**
- * College ERP user menu and theme toggle.
- *
- * @module theme_erp/user_menu
- */
+define(['jquery'], function($) {
+    'use strict';
 
-export const init = () => {
+    return {
+        init: function() {
 
-    // ------------------------------------------
-    // User dropdown.
-    // ------------------------------------------
+            var html = document.documentElement;
 
-    document.addEventListener('click', (event) => {
+            // ── Theme toggle ──────────────────────────────────────────────
+            var themeBtn = document.getElementById('erp-theme-toggle');
 
-        const button = event.target.closest('.erp-user-chip');
-
-        const userMenu = document.querySelector('.erp-user-menu');
-        const menu = userMenu?.querySelector('.erp-dropdown');
-
-        if (!userMenu || !menu) {
-            return;
-        }
-
-        // Account button clicked.
-        if (button && userMenu.contains(button)) {
-
-            event.preventDefault();
-            event.stopPropagation();
-
-            const isOpen = menu.classList.contains('show');
-
-            menu.classList.toggle('show', !isOpen);
-
-            button.setAttribute(
-                'aria-expanded',
-                String(!isOpen)
-            );
-
-            return;
-        }
-
-        // Click outside account menu.
-        if (!userMenu.contains(event.target)) {
-
-            menu.classList.remove('show');
-
-            userMenu.querySelector('.erp-user-chip')
-                ?.setAttribute('aria-expanded', 'false');
-        }
-    });
-
-    // Close dropdown using Escape.
-    document.addEventListener('keydown', (event) => {
-
-        if (event.key !== 'Escape') {
-            return;
-        }
-
-        const menu = document.querySelector('.erp-dropdown');
-        const button = document.querySelector('.erp-user-chip');
-
-        menu?.classList.remove('show');
-        button?.setAttribute('aria-expanded', 'false');
-        button?.focus();
-    });
-
-    // ------------------------------------------
-    // Theme toggle.
-    // ------------------------------------------
-
-    const html = document.documentElement;
-    const themeButton = document.getElementById('erp-theme-toggle');
-
-    if (themeButton) {
-
-        const getTheme = () => {
-            try {
-                return localStorage.getItem('erp-moodle-theme') || 'light';
-            } catch (e) {
-                return 'light';
+            function getTheme() {
+                try { return localStorage.getItem('erp-moodle-theme') || 'light'; }
+                catch (e) { return 'light'; }
             }
-        };
 
-        const setTheme = (theme) => {
+            function setTheme(theme) {
+                html.setAttribute('data-bs-theme', theme);
+                try { localStorage.setItem('erp-moodle-theme', theme); } catch (e) {}
+                if (themeBtn) {
+                    themeBtn.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+                    themeBtn.setAttribute('title',
+                        theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'
+                    );
+                }
+            }
 
-            html.setAttribute('data-bs-theme', theme);
+            if (themeBtn) {
+                setTheme(getTheme());
+                themeBtn.addEventListener('click', function() {
+                    setTheme(getTheme() === 'dark' ? 'light' : 'dark');
+                });
+            }
 
-            try {
-                localStorage.setItem('erp-moodle-theme', theme);
-            } catch (e) {}
+            // ── Profile dropdown ──────────────────────────────────────────
+            var userBtn  = document.getElementById('erp-user-btn');
+            var userMenu = document.getElementById('erp-profile-menu');
 
-            themeButton.setAttribute(
-                'aria-pressed',
-                String(theme === 'dark')
-            );
+            if (userBtn && userMenu) {
 
-            themeButton.setAttribute(
-                'title',
-                theme === 'dark'
-                    ? 'Switch to light theme'
-                    : 'Switch to dark theme'
-            );
-        };
+                function isOpen() {
+                    return userMenu.classList.contains('erp-pm-open');
+                }
+                function openMenu() {
+                    userMenu.classList.add('erp-pm-open');
+                    userBtn.setAttribute('aria-expanded', 'true');
+                    var first = userMenu.querySelector('a.erp-pm-item');
+                    if (first) { first.focus(); }
+                }
+                function closeMenu() {
+                    userMenu.classList.remove('erp-pm-open');
+                    userBtn.setAttribute('aria-expanded', 'false');
+                }
 
-        setTheme(getTheme());
+                userBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    isOpen() ? closeMenu() : openMenu();
+                });
 
-        themeButton.addEventListener('click', () => {
-            setTheme(
-                getTheme() === 'dark' ? 'light' : 'dark'
-            );
-        });
-    }
-};
+                document.addEventListener('click', function(e) {
+                    if (!userBtn.contains(e.target) && !userMenu.contains(e.target)) {
+                        closeMenu();
+                    }
+                });
+
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && isOpen()) {
+                        closeMenu();
+                        userBtn.focus();
+                    }
+                });
+
+                userMenu.addEventListener('keydown', function(e) {
+                    var items = Array.prototype.slice.call(
+                        userMenu.querySelectorAll('a.erp-pm-item')
+                    );
+                    var idx = items.indexOf(document.activeElement);
+                    if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        items[idx < items.length - 1 ? idx + 1 : 0].focus();
+                    } else if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        if (idx > 0) { items[idx - 1].focus(); }
+                        else { closeMenu(); userBtn.focus(); }
+                    } else if (e.key === 'Tab') {
+                        closeMenu();
+                    }
+                });
+            }
+        }
+    };
+});

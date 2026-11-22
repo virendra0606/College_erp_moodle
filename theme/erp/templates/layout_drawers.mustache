@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html {{{ output.htmlattributes }}}>
 <head>
     <title>{{{ output.page_title }}}</title>
@@ -152,19 +151,42 @@
 <aside class="erp-sidebar" id="erp-sidebar"
        aria-label="Moodle navigation">
 
-{{! Main Moodle navigation }}
-    
-    {{! Course index }}
-    <div class="erp-sidebar-head erp-course-heading">
-        <i class="bi bi-journals" aria-hidden="true"></i>
-        <span>Course index</span>
-    </div>
+{{# isadmin }}
+<details class="erp-admin-menu" id="erp-admin-menu">
+    <summary class="erp-sidebar-head">
+        <i class="bi bi-gear-wide-connected"></i>
+        <span>Administration</span>
+        <i class="bi bi-chevron-down erp-admin-chevron"></i>
+    </summary>
 
-    {{# usercourseindex }}
-    <div class="erp-courseindex" id="courseindex">
+    <ul class="erp-admin-category-list">
+        {{#admincategories}}
+        <li>
+            <a href="{{{url}}}" class="erp-admin-category-link">
+                <i class="bi bi-folder2-open"></i>
+                <span>{{name}}</span>
+            </a>
+        </li>
+        {{/admincategories}}
+    </ul>
+</details>
+{{/ isadmin }}
+
+        <div class="erp-courseindex" id="courseindex">
+        {{# coursename }}
+        <div class="erp-sidebar-head erp-course-heading">
+            <i class="bi bi-journal-bookmark-fill" aria-hidden="true"></i>
+            <span>{{ coursename }}</span>
+        </div>
+        {{/ coursename }}
+        {{^ coursename }}
+        <div class="erp-sidebar-head erp-course-heading">
+            <i class="bi bi-journals" aria-hidden="true"></i>
+            <span>Course index</span>
+        </div>
+        {{/ coursename }}
         {{{ courseindex }}}
     </div>
-    {{/ usercourseindex }}
 
 </aside>
 {{/ loggedin }}
@@ -185,9 +207,7 @@
         </div>
         {{/ overflow }}
 
-        <div class="erp-page-header">
-            {{{ headercontent }}}
-        </div>
+        
 
         {{{ beforecontent }}}
 
